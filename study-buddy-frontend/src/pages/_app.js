@@ -1,34 +1,35 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { buildStore } from '../util/redux';
-import { CssBaseline, StyledEngineProvider } from '@mui/material';
-
 import Head from 'next/head';
-import { StudyBuddyThemeProvider, createEmotionCache } from '../util/theme';
-import { CacheProvider } from '@emotion/react';
+import { Provider as ReduxProvider } from 'react-redux';
 
+import { AppCacheProvider } from '@mui/material-nextjs/v14-pagesRouter';
+import { CssBaseline } from '@mui/material';
+
+import { StudyBuddyThemeProvider } from '@/utils/theme';
+import { buildStore } from '@/utils/redux';
+
+import '@/styles/globals.css'
+
+// Initialize Redux
 let initialState = {};
-let store = buildStore(initialState);
-const clientSideEmotionCache = createEmotionCache();
+let reduxStore = buildStore(initialState);
 
-const StudyBuddyApp = ({ Component, pageProps, emotionCache = clientSideEmotionCache }) => {
-    return (
-        <Provider store={ store }>
-            <CacheProvider value={emotionCache}>
-                <Head>
-                    <title>My page</title>
-                    <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
-                </Head>
+export default function App({ Component, pageProps }) {
+  return (
+    <ReduxProvider store={reduxStore}>
+      <AppCacheProvider>
+        <Head>
+          <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width' />
+          <link rel='icon' href='/favicon.ico' />
+        </Head>
 
-                <StudyBuddyThemeProvider>
-                    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                    <CssBaseline />
+        <StudyBuddyThemeProvider>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
 
-                    <Component {...pageProps} />
-                </StudyBuddyThemeProvider>
-            </CacheProvider>
-        </Provider>
-    )
-};
-
-export default StudyBuddyApp;
+          <Component {...pageProps} />
+        </StudyBuddyThemeProvider>
+      </AppCacheProvider>
+    </ReduxProvider>
+  );
+}
