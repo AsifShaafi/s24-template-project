@@ -10,10 +10,12 @@ This `README.md` file will serve as a general setup guide for the project. In ad
 
 ## Table of Contents
 
-1. MySQL Database Setup Instructions
-2. Backend (`/study-buddy-api`) Setup Instructions
-3. Frontend (`/study-buddy-frontend`) Setup Instructions
-4. CI/CD Setup Instructions
+- [Study Buddy Spring 2024](#study-buddy-spring-2024)
+  - [Table of Contents](#table-of-contents)
+  - [MySQL Database Setup Instructions](#mysql-database-setup-instructions)
+  - [Backend (`/study-buddy-api`) Setup Instructions](#backend-study-buddy-api-setup-instructions)
+  - [Frontend (`/study-buddy-frontend`) Setup Instructions](#frontend-study-buddy-frontend-setup-instructions)
+  - [CI/CD (GitHub \& GCP) Setup Instructions](#cicd-github--gcp-setup-instructions)
 
 ## MySQL Database Setup Instructions
 
@@ -28,7 +30,7 @@ This `README.md` file will serve as a general setup guide for the project. In ad
    - To stop the database, use: `docker compose -f docker/local.docker-compose.yml down`
    - To clear the data from the database, use: `docker compose -f docker/local.docker-compose.yml down -v`
 
-## Backend Setup Instructions
+## Backend (`/study-buddy-api`) Setup Instructions
 
 [(back to top)](#table-of-contents)
 
@@ -52,7 +54,7 @@ This `README.md` file will serve as a general setup guide for the project. In ad
 5. Start the backend. The easiest way to do this is to open `StudyBuddyApplication.java` and click the "play" button on the left.
 6. Verify the backend is running by navigating to `http://localhost:8080/ping` in your web browser. If you see `pong!`, then everything is working!
 
-## Frontend Setup Instructions
+## Frontend (`/study-buddy-frontend`) Setup Instructions
 
 [(back to top)](#table-of-contents)
 
@@ -69,7 +71,7 @@ This `README.md` file will serve as a general setup guide for the project. In ad
    - `yarn build` builds a production version of the project that can be run with `yarn start`
 6. Verify the frontend is running by navigating to `http://localhost:3000` in your web browser. If you see the home page, then everything is working!
 
-## CI/CD Setup Instructions
+## CI/CD (GitHub & GCP) Setup Instructions
 
 [(back to top)](#table-of-contents)
 
@@ -97,31 +99,5 @@ GCP offers a free trial that will work for our purposes in this project. Keep in
    - We want our runner to build a Docker image for both our frontend and backend on a commit and then deploy those images as containers, along with our database image, to our production server. The way this is done is largely up to you; we have provided sample Dockerfiles (`/docker`) and a sample GitHub actions workflow file (`/cicd/sample-github-actions-ci.yml`) to give an example of how it could be achieved. You will need to make minor modifications to the sample workflow file for it to work (see more in the `sample-github-actions-ci.yml` file)
    - Whenever a commit is made, a workflow should be created for your GitHub project. You can view this workflow to see its status while it is executing in the "Actions" tab on GitHub. Create a commit to test this.
    - To learn more about how to create and run a Docker image from a GitHub Actions workflow, see: https://linuxhit.com/how-to-create-docker-images-with-github-actions/ or https://docs.github.com/en/actions/creating-actions/creating-a-docker-container-action
-
-This will get basic CI/CD functionality setup for your project. Feel free to customize this process to fit your needs as the project progresses. Note that one of your project deliverables will be extending the CI/CD to also support running automated tests.
-
-## 3. CI/CD Setup
-
-[(back to top)](#table-of-contents)
-
- - Setup an account with GCP if you don't already have one.
- - Create a Linux VM in GCP: This will be your production server.
-   - Enable the Compute Engine API, and create a Linux VM Instance under that resource.
-   - check the options for allowing both HTTP and HTTPS traffic to the VM. This should give your VM an external IP address once it's created.
-   - Navigate to "VM instances" tab and click the "Set up firewall rules" option.
-   - Select the "default-allow-http" rule, and select "Edit" at the top of the page.
-   - In the "TCP Ports" section, add 8080 and 3000. This will allow you to access those ports from your local machine. If, in the future, you need to add more or different HTTP ports, you would do so in the same way. Also, if you want to add HTTPS ports, you would do so in the same way, just under the "default-allow-https" rule.
- - Setup a GitHub runner: The GitHub runner waits for commits to be made to the branch it is configured to watch and runs a user-defined set of commands when one occurs. This runner must be linked to your repository first.
-   - Open an SSH terminal to your VM in GCP
-   - Install a GitHub self-hosted runner on the VM using the instructions found by navigating in your GitHub Repository from: Settings > Actions > Runners > New self-hosted runner. Follow the "Download" and "Configure" instructions **EXCEPT FOR THE `./run.sh` COMMAND**.
-   - Install docker on your VM, using the following instructions (using the repository): https://docs.docker.com/engine/install/debian/#install-using-the-repository 
-   - Run the following command, giving your GitHub runner permissions to run docker commands: `sudo usermod -aG docker <my-username>` (`<my-username>` is the username that you used to log in via SSH to the VM).
-     - To check if `<my-username>` has access to Docker run: `sudo -u <my-username> -H docker info`. This command will fail if that user does not have permission.
-   - Finally, configure your GitHub runner to run as a service in the background and automatically restart if it crashes. Run `sudo ./svc.sh install` and `sudo ./svc.sh start`. More Info: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/configuring-the-self-hosted-runner-application-as-a-service
- - Write a GitHub Actions workflow (CI pipeline) file.
-   - This file tells the GitHub runner what to do whenever a commit is made to the branch the file is in; You can learn more here: https://docs.github.com/en/actions/quickstart
-   - We want our runner to build a docker image for both our frontend and backend on a commit and then deploy those images as containers, along with our database image, to our production server. The way this is done is largely up to you; we have provided sample Dockerfiles and a sample GitHub actions workflow file (`sample-github-actions-ci.yml`) to give an example of how it could be achieved.
-   - Whenever a commit is made, a workflow should be created for your GitHub project. You can view this workflow to see its status while it is executing in the "Actions" tab on GitHub.
-   - To learn more about how to create and run a Docker image from a GitHub Actions workflow, see: 
 
 This will get basic CI/CD functionality setup for your project. Feel free to customize this process to fit your needs as the project progresses. Note that one of your project deliverables will be extending the CI/CD to also support running automated tests.
