@@ -1,19 +1,13 @@
-package study.buddy.api.user;
+package studybuddy.api.user;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = User.TABLE_NAME)
 public class User {
-    public static final String TABLE_NAME = "USER";
+    public static final String TABLE_NAME = "USERS";
 
     @Id
     @GeneratedValue(generator = TABLE_NAME + "_GENERATOR")
