@@ -102,6 +102,8 @@ This will get basic CI/CD functionality setup for your project. Feel free to cus
 
 ## 3. CI/CD Setup
 
+[(back to top)](#table-of-contents)
+
  - Setup an account with GCP if you don't already have one.
  - Create a Linux VM in GCP: This will be your production server.
    - Enable the Compute Engine API, and create a Linux VM Instance under that resource.
