@@ -3,7 +3,7 @@ services:
   frontend:
     image: study-buddy-frontend
     build:
-      context: study-buddy-frontend
+      context: ../study-buddy-frontend
       dockerfile: ../docker/study-buddy-frontend.Dockerfile
     restart: always
     ports:
@@ -12,7 +12,7 @@ services:
   api:
     image: study-buddy-api
     build:
-      context: study-buddy-api
+      context: ../study-buddy-api
       dockerfile: ../docker/study-buddy-api.Dockerfile
     restart: always
     ports:
