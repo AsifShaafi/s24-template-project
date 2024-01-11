@@ -9,7 +9,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetcher = async () => {
-        const data = await fetch("http://104.197.124.81:8080/users/1");
+        const data = await fetch("http://35.222.222.87:8080/users/1");
         // const data = await fetch("http://localhost:8080/users/1");
         setResponse(JSON.stringify(await data.json()));
     }
