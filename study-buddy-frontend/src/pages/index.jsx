@@ -1,8 +1,22 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import Head from 'next/head'
 import { Button, Card, CardContent, Stack, Typography } from '@mui/material'
 import styles from '@/styles/Home.module.css'
 
 export default function HomePage() {
+  const [response, setResponse] = useState('');
+
+  useEffect(() => {
+    const fetcher = async () => {
+        const data = await fetch("http://104.197.124.81:8080/users/1");
+        // const data = await fetch("http://localhost:8080/users/1");
+        setResponse(JSON.stringify(await data.json()));
+    }
+
+    fetcher();
+  }, []);
+
   const onButtonPress = () => {
     alert('You pressed a button!');
   }
@@ -28,6 +42,7 @@ export default function HomePage() {
             {/* Another way is by creating a dedicated CSS file and using the styles from there: */}
             <Button variant='contained' color="secondary" onClick={onButtonPress} className={styles.wideButton}>I am a wider button</Button>
           </Stack>
+          <pre>{response}</pre>
         </Stack>
       </main>
     </>
