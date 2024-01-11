@@ -13,7 +13,6 @@ public class UserEndpoint {
     private UserService userService;
 
     @GetMapping("/users/{id}")
-    @CrossOrigin(origins = "*")
     public User findUserById(@PathVariable Long id) {
         var user = userService.findUser(id).orElse(null);
 
