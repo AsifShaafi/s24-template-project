@@ -80,21 +80,27 @@ Only one deployed instance of your project is required. However, we require that
 GCP offers a free trial that will work for our purposes in this project. Keep in mind, however, that the free trial is not unlimited—it is up to your team to ensure that you are staying within the free trial budget. However, the budget should be more than sufficient for the purposes of this project.
 
 1. Open the Google Cloud Console: https://console.cloud.google.com/ and create a Google account if you don't already have one
-2. Create a Linux VM in GCP. This will be your production server:
-   1. If prompted to enable the Compute Engine API, enable it!
-   2. Check the options for allowing both HTTP and HTTPS traffic to the VM. This will give your VM an external IP address once it is created
+2. Enable the GCP free trial by hitting the "try for free" button on the home page and following the instructions.
+   1. Choose "individual" as the account type.
+   2. Enter a credit card or debit card. As the page says, "We ask you for your credit card to make sure you are not a robot. If you use a credit or debit card, you won't be charged unless you manually activate your full account."
+3. Activating the free trial should have created a project called "My First Project". Projects are simply a way to organize cloud resources in GCP. If you want to use a different project or create a new one, click the dropdown at the top of the screen
+4. In the search bar, search for "Compute Engine". This should take you to a page called "Compute Engine API". Click the **enable** button
+5. Create a Linux VM in GCP. This will be your production server
+   1. Search for "Add VM Instance". This should open the instance creation page
+   2. You can leave everything as default except for the firewall settings:
+      1. Check the options for allowing both HTTP and HTTPS traffic to the VM. This will give your VM an external IP address once it is created
    3. Click the "Create" button
-3. Navigate to the "VM instances" tab and click the "Set up firewall rules" option
+6. Navigate to the "VM instances" tab and click the "Set up firewall rules" option
    1. Select the `default-allow-http` rule, and select "Edit" at the top of the page
    2. In the "TCP Ports" section, add 8080 and 3000. This will allow you to access those ports from your local machine. In the future, if you need to add additional or different HTTP ports, you would do so in the same way. Also, if you want to add HTTPS ports, do so in the same way under the `default-allow-https` rule
-4. Setup a GitHub runner. The GitHub runner waits for certain actions to happen in your repository and runs a user-defined set of commands when one occurs. We will be using this runner to rebuild and redeploy our project whenever a commit on the `main` branch occurs. First, we need to link the runner to your repository:
+7. Setup a GitHub runner. The GitHub runner waits for certain actions to happen in your repository and runs a user-defined set of commands when one occurs. We will be using this runner to rebuild and redeploy our project whenever a commit on the `main` branch occurs. First, we need to link the runner to your repository:
    1. Open an SSH terminal to your VM in GCP
    2. Install a GitHub self-hosted runner on the VM using the instructions found in your GitHub Repository at Settings > Actions > Runners > New self-hosted runner. Follow the "Download" and "Configure" instructions for Linux **EXCEPT FOR THE `./run.sh` COMMAND.**
    3. Install Docker on your VM, using the following instructions (under "Install using the apt repository"): https://docs.docker.com/engine/install/debian/#install-using-the-repository
    4. Run the following command, giving your GitHub runner permission to use Docker commands: `sudo usermod -aG docker <my-username>` (`<my-username>` is the username that you used to log in via SSH to the VM)
    5. To check if `<my-username>` now has access to Docker run: `sudo -u <my-username> -H docker info`. This command will fail if that user does not have permission.
    6. Finally, configure your GitHub runner to run as a service in the background and automatically restart if it crashes. Run `sudo ./svc.sh install` and `sudo ./svc.sh start`. After you deploy your project, you can check the status by running: `sudo ./svc.sh status`. More Info: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/configuring-the-self-hosted-runner-application-as-a-service
-5. Write a GitHub Actions workflow (CI pipeline) file.
+8. Write a GitHub Actions workflow (CI pipeline) file.
    - This file will tell the GitHub runner what to do whenever a commit is made to the branch the file is in; you can learn more here: https://docs.github.com/en/actions/quickstart
    - We want our runner to build a Docker image for both our frontend and backend on a commit and then deploy those images as containers, along with our database image, to our production server. The way this is done is largely up to you; we have provided sample Dockerfiles (`/docker`) and a sample GitHub actions workflow file (`/cicd/sample-github-actions-ci.yml`) to give an example of how it could be achieved. You will need to make minor modifications to the sample workflow file for it to work (see more in the `sample-github-actions-ci.yml` file)
    - Whenever a commit is made, a workflow should be created for your GitHub project. You can view this workflow to see its status while it is executing in the "Actions" tab on GitHub. Create a commit to test this.
